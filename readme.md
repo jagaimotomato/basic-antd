@@ -23,7 +23,7 @@
 >前端代码：[传送门](https://github.com/MarshallTeach/basic-antd-front)
 
 ###### 项目启动
-- 新建"basic_antd"数据库,将config的sql文件导入数据库,config中的数据库用户名跟参数
+- 新建"basic_antd"数据库，将config的sql文件导入数据库，修改config中的数据库用户名跟参数
 - go get
 - go run main.go link start
 
