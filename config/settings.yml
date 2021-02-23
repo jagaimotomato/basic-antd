@@ -1,0 +1,38 @@
+settings:
+  application:
+    mode: dev
+    host: 0.0.0.0
+    name: basic
+    port: 8888
+    readTimeout: 1
+    writerTimeout: 2
+  redis:
+    addr: localhost:6379
+    password:
+    db: 0
+  ssl:
+    #https 对应域名
+    domain: localhost:2887
+    #https 开关
+    enable: false
+    key:
+    pem:
+  logger:
+    path: temp/logs
+    # 控制台日志
+    stdout: true
+    # 日志等级
+    level: all
+    # 业务日志开关
+    enabledbus: true
+    # 请求日志开关
+    enabledreq: false
+    # 数据库日志开关 dev 模式 自动开启
+    enableddb: true
+  jwt:
+    secret: basic_antd
+    timeout: 3600
+    rememberTimeout: 86400
+  database:
+    dirver: mysql
+    source: root:root@tcp(127.0.0.1:3306)/basic_antd?charset=utf8&parseTime=True&loc=Local&timeout=1000ms

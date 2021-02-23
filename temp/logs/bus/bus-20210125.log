@@ -1,0 +1,40 @@
+2021-01-25 02:13:06.966 [INFO] [0;0;32mLogger init success![0m
+2021-01-25 02:13:07.005 [INFO] mysql.go:23: [0;0;32mroot:root@tcp(127.0.0.1:3306)/basic_antd?charset=utf8&parseTime=True&loc=Local&timeout=1000ms[0m
+2021-01-25 02:13:07.009 [INFO] mysql.go:40: [0;0;32m connect success ![0m
+2021-01-25 02:13:07.009 [INFO] server.go:54: starting blog api server
+2021-01-25 02:25:30.934 server.go:116: Server exiting
+2021-01-25 02:25:36.324 [INFO] [0;0;32mLogger init success![0m
+2021-01-25 02:25:36.356 [INFO] mysql.go:23: [0;0;32mroot:root@tcp(127.0.0.1:3306)/basic_antd?charset=utf8&parseTime=True&loc=Local&timeout=1000ms[0m
+2021-01-25 02:25:36.359 [INFO] mysql.go:40: [0;0;32m connect success ![0m
+2021-01-25 02:25:36.359 [INFO] server.go:54: starting blog api server
+2021-01-25 02:41:01.069 server.go:116: Server exiting
+2021-01-25 10:50:38.939 [INFO] [0;0;32mLogger init success![0m
+2021-01-25 10:50:38.977 [INFO] mysql.go:23: [0;0;32mroot:root@tcp(127.0.0.1:3306)/basic_antd?charset=utf8&parseTime=True&loc=Local&timeout=1000ms[0m
+2021-01-25 10:50:39.978 [FATA] mysql.go:38: [0;0;31m connect error :[0m dial tcp 127.0.0.1:3306: i/o timeout 
+Stack:
+1.  basic-antd/init/database.Setup
+    D:/back/me/basic-antd/init/database/mysql.go:38
+2.  basic-antd/cmd/api.setup
+    D:/back/me/basic-antd/cmd/api/server.go:52
+3.  basic-antd/cmd/api.glob..func1
+    D:/back/me/basic-antd/cmd/api/server.go:30
+4.  github.com/spf13/cobra.(*Command).execute
+    D:/private/my-compose/gins/pkg/mod/github.com/spf13/cobra@v1.1.1/command.go:843
+5.  github.com/spf13/cobra.(*Command).ExecuteC
+    D:/private/my-compose/gins/pkg/mod/github.com/spf13/cobra@v1.1.1/command.go:958
+6.  github.com/spf13/cobra.(*Command).Execute
+    D:/private/my-compose/gins/pkg/mod/github.com/spf13/cobra@v1.1.1/command.go:895
+7.  basic-antd/cmd.Execute
+    D:/back/me/basic-antd/cmd/cobra.go:47
+8.  main.main
+    D:/back/me/basic-antd/main.go:6
+
+2021-01-25 10:50:59.087 [INFO] [0;0;32mLogger init success![0m
+2021-01-25 10:50:59.121 [INFO] mysql.go:23: [0;0;32mroot:root@tcp(127.0.0.1:3306)/basic_antd?charset=utf8&parseTime=True&loc=Local&timeout=1000ms[0m
+2021-01-25 10:50:59.126 [INFO] mysql.go:40: [0;0;32m connect success ![0m
+2021-01-25 10:50:59.126 [INFO] server.go:54: starting blog api server
+2021-01-25 14:16:52.847 server.go:116: Server exiting
+2021-01-25 14:16:58.908 [INFO] [0;0;32mLogger init success![0m
+2021-01-25 14:16:58.950 [INFO] mysql.go:23: [0;0;32mroot:root@tcp(127.0.0.1:3306)/basic_antd?charset=utf8&parseTime=True&loc=Local&timeout=1000ms[0m
+2021-01-25 14:16:58.957 [INFO] mysql.go:40: [0;0;32m connect success ![0m
+2021-01-25 14:16:58.958 [INFO] server.go:54: starting blog api server

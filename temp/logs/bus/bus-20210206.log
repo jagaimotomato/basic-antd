@@ -1,0 +1,40 @@
+2021-02-06 12:36:07.239 server.go:117: Server exiting
+2021-02-06 12:36:16.837 [INFO] [0;0;32mLogger init success![0m
+2021-02-06 12:36:16.869 [INFO] mysql.go:23: [0;0;32mroot:root@tcp(127.0.0.1:3306)/basic_antd?charset=utf8&parseTime=True&loc=Local&timeout=1000ms[0m
+2021-02-06 12:36:16.871 [INFO] mysql.go:40: [0;0;32m connect success ![0m
+2021-02-06 12:36:16.872 [INFO] server.go:55: starting blog api server
+2021-02-06 15:05:39.073 server.go:117: Server exiting
+2021-02-06 15:05:42.062 [INFO] [0;0;32mLogger init success![0m
+2021-02-06 15:05:42.092 [INFO] mysql.go:23: [0;0;32mroot:root@tcp(127.0.0.1:3306)/basic_antd?charset=utf8&parseTime=True&loc=Local&timeout=1000ms[0m
+2021-02-06 15:05:42.096 [INFO] mysql.go:40: [0;0;32m connect success ![0m
+2021-02-06 15:05:42.097 [INFO] server.go:55: starting blog api server
+2021-02-06 15:09:12.987 server.go:117: Server exiting
+2021-02-06 15:09:15.588 [INFO] [0;0;32mLogger init success![0m
+2021-02-06 15:09:15.618 [INFO] mysql.go:23: [0;0;32mroot:root@tcp(127.0.0.1:3306)/basic_antd?charset=utf8&parseTime=True&loc=Local&timeout=1000ms[0m
+2021-02-06 15:09:15.622 [INFO] mysql.go:40: [0;0;32m connect success ![0m
+2021-02-06 15:09:15.622 [INFO] server.go:55: starting blog api server
+2021-02-06 15:09:32.612 server.go:117: Server exiting
+2021-02-06 15:09:35.382 [INFO] [0;0;32mLogger init success![0m
+2021-02-06 15:09:35.410 [INFO] mysql.go:23: [0;0;32mroot:root@tcp(127.0.0.1:3306)/basic_antd?charset=utf8&parseTime=True&loc=Local&timeout=1000ms[0m
+2021-02-06 15:09:35.413 [INFO] mysql.go:40: [0;0;32m connect success ![0m
+2021-02-06 15:09:35.414 [INFO] server.go:55: starting blog api server
+2021-02-06 15:11:33.843 server.go:117: Server exiting
+2021-02-06 15:11:36.548 [INFO] [0;0;32mLogger init success![0m
+2021-02-06 15:11:36.579 [INFO] mysql.go:23: [0;0;32mroot:root@tcp(127.0.0.1:3306)/basic_antd?charset=utf8&parseTime=True&loc=Local&timeout=1000ms[0m
+2021-02-06 15:11:36.582 [INFO] mysql.go:40: [0;0;32m connect success ![0m
+2021-02-06 15:11:36.582 [INFO] server.go:55: starting blog api server
+2021-02-06 15:17:28.808 server.go:117: Server exiting
+2021-02-06 15:17:31.959 [INFO] [0;0;32mLogger init success![0m
+2021-02-06 15:17:31.990 [INFO] mysql.go:23: [0;0;32mroot:root@tcp(127.0.0.1:3306)/basic_antd?charset=utf8&parseTime=True&loc=Local&timeout=1000ms[0m
+2021-02-06 15:17:31.995 [INFO] mysql.go:40: [0;0;32m connect success ![0m
+2021-02-06 15:17:31.995 [INFO] server.go:55: starting blog api server
+2021-02-06 15:21:04.383 server.go:117: Server exiting
+2021-02-06 15:21:06.896 [INFO] [0;0;32mLogger init success![0m
+2021-02-06 15:21:06.925 [INFO] mysql.go:23: [0;0;32mroot:root@tcp(127.0.0.1:3306)/basic_antd?charset=utf8&parseTime=True&loc=Local&timeout=1000ms[0m
+2021-02-06 15:21:06.929 [INFO] mysql.go:40: [0;0;32m connect success ![0m
+2021-02-06 15:21:06.930 [INFO] server.go:55: starting blog api server
+2021-02-06 15:24:56.352 server.go:117: Server exiting
+2021-02-06 15:25:43.128 [INFO] [0;0;32mLogger init success![0m
+2021-02-06 15:25:43.157 [INFO] mysql.go:23: [0;0;32mroot:root@tcp(127.0.0.1:3306)/basic_antd?charset=utf8&parseTime=True&loc=Local&timeout=1000ms[0m
+2021-02-06 15:25:43.160 [INFO] mysql.go:40: [0;0;32m connect success ![0m
+2021-02-06 15:25:43.162 [INFO] server.go:55: starting blog api server

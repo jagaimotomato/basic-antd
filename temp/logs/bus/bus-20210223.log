@@ -1,0 +1,8 @@
+2021-02-23 13:47:21.636 server.go:119: Server exiting
+2021-02-23 13:47:25.435 [INFO] [0;0;32mLogger init success![0m
+2021-02-23 13:47:25.464 [INFO] mysql.go:23: [0;0;32mroot:root@tcp(127.0.0.1:3306)/basic_antd?charset=utf8&parseTime=True&loc=Local&timeout=1000ms[0m
+2021-02-23 13:47:25.468 [INFO] mysql.go:40: [0;0;32m connect success ![0m
+2021-02-23 13:47:40.766 [INFO] [0;0;32mLogger init success![0m
+2021-02-23 13:47:40.795 [INFO] mysql.go:23: [0;0;32mroot:root@tcp(127.0.0.1:3306)/basic_antd?charset=utf8&parseTime=True&loc=Local&timeout=1000ms[0m
+2021-02-23 13:47:40.799 [INFO] mysql.go:40: [0;0;32m connect success ![0m
+2021-02-23 13:47:40.852 [INFO] server.go:57: starting blog api server

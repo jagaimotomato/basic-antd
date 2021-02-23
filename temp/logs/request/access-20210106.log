@@ -1,0 +1,2 @@
+2021-01-06 15:48:09.507 auth.go:54: Error 1146: Table 'zw_blog.v1_user' doesn't exist
+2021-01-06 15:49:01.656 auth.go:54: record not found
