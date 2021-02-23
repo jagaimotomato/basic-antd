@@ -12,7 +12,7 @@
 
 ###### 预览
 <p align="center">
-  <img  src="http://115.29.226.247:8888/static/screen.png">
+  <img  src="https://github.com/MarshallTeach/basic-antd/blob/main/assets/images/screen.png">
 </p>
 
 ###### 🎬 在线体验
@@ -47,7 +47,7 @@
 - 如果这个项目有帮助到你的地方，欢迎star~
 
 <p align="center">
-  <img  src="http://115.29.226.247:8888/static/xmn.gif" width="200px" height="200px">
+  <img  src="https://github.com/MarshallTeach/basic-antd/blob/main/assets/images/xmn.gif" width="200px" height="200px">
 </p>
 
 ###### ToDo
