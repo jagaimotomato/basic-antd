@@ -36,7 +36,7 @@
 - linux: nohup ./basic_antd link start -c config/settings.yml &
 
 ####### 代码有参考 wenjianzhang 大佬的 开源项目（基于element ui）
-传送门：
+- 传送门：
 [go-admin-team](https://github.com/go-admin-team/go-admin)
 
 ###### Q&A
