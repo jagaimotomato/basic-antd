@@ -41,9 +41,6 @@
 - 传送门：
 [go-admin-team](https://github.com/go-admin-team/go-admin)
 
-###### Q&A
-- 为什么写这个项目? A: 练手和单纯的觉得antd的Ui更好看(个人观点，欢迎提出issue跟star~)
-
 ###### 想说的话
 - 如果有问题或者BUG或者某个函数有更好的算法或者写法，欢迎提出issue||pr，共同进步
 - 如果这个项目有帮助到你的地方，欢迎star~
