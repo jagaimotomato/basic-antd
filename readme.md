@@ -4,7 +4,7 @@
 [ANTDV 官方文档](https://pro.antdv.com/)
 
 ###### ✨ 简介
-- 基础的多角色权限系统
+- 基础的多角色权限系统，颗粒度细到每一个操作类型
 - RESTful API
 - 基于golang的GIN框架
 - JWT认证及Casbin的访问控制模型
@@ -53,6 +53,5 @@
 </p>
 
 ###### ToDo
-- 使用redis缓存
-- 整合websocket
-- 加入rabbitmq或者kafka
+- 使用redis缓存优化代码
+- 加入im服务
