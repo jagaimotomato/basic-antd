@@ -71,7 +71,7 @@ func (l *Login) GetUser() (user User, flag int, err error) {
 		flag = 3
 		return
 	}
-	if err = orm.Eloquent.Table(user.TableName()).Select("user_role.*,role.*").Where("user.user_id = ? and role.status = ?", user.UserId, 1).Joins("left join user_role on user.user_id = user_role.user_id").Joins("left join role on role.role_id = user_role.role_id").Order("sort asc").Find(&user.Roles).Error; err != nil {
+	if err = orm.Eloquent.Table(user.TableName()).Select("user_role.*,role.*").Where("user.user_id = ? and role.status = ?", user.UserId, 1).Joins("left join user_role on user.user_id = user_role.user_id").Joins("left join role on role.role_id = user_role.role_id").Order("sort").Find(&user.Roles).Error; err != nil {
 		return
 	}
 	flag = 0

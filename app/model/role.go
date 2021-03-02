@@ -58,7 +58,7 @@ func (r *Role) GetPage(pageIndex, pageSize int) (role []Role, count int64, err e
 	if r.Status != "" {
 		table = table.Where("status = ?", r.Status)
 	}
-	if err = table.Offset((pageIndex - 1) * pageSize).Limit(pageSize).Order("sort asc").Find(&role).Offset(-1).Limit(-1).Count(&count).Error; err != nil {
+	if err = table.Offset((pageIndex - 1) * pageSize).Limit(pageSize).Order("sort").Find(&role).Offset(-1).Limit(-1).Count(&count).Error; err != nil {
 		return
 	}
 	return
@@ -75,7 +75,7 @@ func (r *Role) GetRolePermissionPage(pageIndex, pageSize int) (rolePage []Role, 
 				permissions    []Permission
 				newPermissions = make([]Permission, 0)
 			)
-			if err = orm.Eloquent.Select("role_permission.*, permission.*").Where("role_id = ?", v.RoleId).Joins("left join role_permission on permission.permission_id = role_permission.permission_id").Find(&permissions).Order("sort asc").Error; err != nil {
+			if err = orm.Eloquent.Select("role_permission.*, permission.*").Where("role_id = ?", v.RoleId).Joins("left join role_permission on permission.permission_id = role_permission.permission_id").Find(&permissions).Order("sort").Error; err != nil {
 				return
 			}
 			for _, v := range permissions {

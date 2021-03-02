@@ -62,14 +62,14 @@ func (p *Permission) GetPermission() (permission Permission, err error) {
 }
 
 func (p *Permission) GetPermissionsByRoleId(roleId int) (permissions []Permission, err error) {
-	if err = orm.Eloquent.Table(p.TableName()).Joins("left join role_permission on role_permission.permission_id = permission.permission_id").Where("role_permission.role_id = ?", roleId).Order("sort asc").Find(&permissions).Error; err != nil {
+	if err = orm.Eloquent.Table(p.TableName()).Joins("left join role_permission on role_permission.permission_id = permission.permission_id").Where("role_permission.role_id = ?", roleId).Order("sort").Find(&permissions).Error; err != nil {
 		return
 	}
 	return
 }
 
 func (p *Permission) GetPermissionsByRoleIds(roleIds []int) (permissions []Permission, err error) {
-	if err = orm.Eloquent.Select("role_permission.*, permission.*").Joins("left join role_permission on role_permission.permission_id = permission.permission_id").Where("role_permission.role_id in (?)", roleIds).Order("sort asc").Find(&permissions).Error; err != nil {
+	if err = orm.Eloquent.Select("role_permission.*, permission.*").Joins("left join role_permission on role_permission.permission_id = permission.permission_id").Where("role_permission.role_id in (?)", roleIds).Order("sort").Find(&permissions).Error; err != nil {
 		return
 	}
 	/* todo 将去重方法变为公共方法 interface */
@@ -129,7 +129,7 @@ func (p *Permission) GetPermissionsByPid(pageIndex, pageSize int) (permissions [
 	if p.Title != "" {
 		table = table.Where("title like ?", "%"+p.Title+"%")
 	}
-	if err = table.Where("parent_id = ?", 0).Offset((pageIndex - 1) * pageSize).Limit(pageSize).Order("sort asc").Find(&permissions).Offset(-1).Limit(-1).Count(&count).Error; err != nil {
+	if err = table.Where("parent_id = ?", 0).Offset((pageIndex - 1) * pageSize).Limit(pageSize).Order("sort").Find(&permissions).Offset(-1).Limit(-1).Count(&count).Error; err != nil {
 		return
 	}
 	return
@@ -146,7 +146,7 @@ func (p *Permission) GetList() (permissions []Permission, err error) {
 	if p.Actions != "" {
 		table = table.Where("actions = ?", p.Actions)
 	}
-	if err = table.Find(&permissions).Order("sort asc").Error; err != nil {
+	if err = table.Find(&permissions).Order("sort").Error; err != nil {
 		return
 	}
 	return

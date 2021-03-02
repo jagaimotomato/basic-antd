@@ -45,6 +45,7 @@ func (rp *RolePermission) Insert(roleId int, permissionId []int) (err error) {
 		role        Role
 		permissions []Permission
 		rps         = make([]RolePermission, 0)
+		casbinRules []CasbinRule
 	)
 	tx := orm.Eloquent.Begin()
 	defer func() {
@@ -72,15 +73,56 @@ func (rp *RolePermission) Insert(roleId int, permissionId []int) (err error) {
 		rp.PermissionId = v.PermissionId
 		rp.RoleId = role.RoleId
 		rps = append(rps, rp)
+		if v.Actions != "" {
+			var requestMethod string
+			switch v.Actions {
+			case "add":
+				requestMethod = "POST"
+				break
+			case "edit":
+				requestMethod = "PUT"
+				break
+			case "del":
+				requestMethod = "DELETE"
+				break
+			case "query":
+				requestMethod = "GET"
+				break
+			case "get":
+				requestMethod = "GET"
+				break
+			default:
+				requestMethod = ""
+				break
+			}
+			casbinRules = append(casbinRules, CasbinRule{
+				PType: "p",
+				V0:    role.RoleKey,
+				V1:    v.Path,
+				V2:    requestMethod,
+			})
+		}
 	}
 	if err = orm.Eloquent.Table(rp.TableName()).Create(&rps).Error; err != nil {
 		tx.Rollback()
 		return
 	}
+
+	if len(casbinRules) > 0 {
+		if err = orm.Eloquent.Table("casbin_rule").Create(&casbinRules).Error; err != nil {
+			tx.Rollback()
+			return
+		}
+	}
+
 	return tx.Commit().Error
 }
 
 func (rp *RolePermission) DeleteRolePermission(roleId []int) (err error) {
+	var (
+		roles    []Role
+		roleKeys []string
+	)
 	tx := orm.Eloquent.Begin()
 	defer func() {
 		if r := recover(); r != nil {
@@ -91,6 +133,17 @@ func (rp *RolePermission) DeleteRolePermission(roleId []int) (err error) {
 		return
 	}
 	if err = tx.Table(rp.TableName()).Where("role_id in (?)", roleId).Delete(&rp).Error; err != nil {
+		tx.Rollback()
+		return
+	}
+	if err = tx.Table("role").Where("role_id in (?)", roleId).Find(&roles).Error; err != nil {
+		tx.Rollback()
+		return
+	}
+	for _, v := range roles {
+		roleKeys = append(roleKeys, v.RoleKey)
+	}
+	if err = tx.Table("casbin_rule").Where("v0 in (?)", roleKeys).Delete(&CasbinRule{}).Error; err != nil {
 		tx.Rollback()
 		return
 	}
