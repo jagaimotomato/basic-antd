@@ -116,6 +116,9 @@ func UpdatePermission(c *gin.Context) {
 		tools.HasError(err, msg.Failed, 500)
 		err = p.BatchInsert(&ps)
 		tools.HasError(err, msg.Failed, 500)
+	} else {
+		err = p.DeleteActionByPid()
+		tools.HasError(err, msg.Failed, 500)
 	}
 	err = p.Update()
 	tools.HasError(err, msg.Failed, 500)
