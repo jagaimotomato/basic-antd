@@ -38,8 +38,8 @@
 - linux: nohup ./basic_antd start -c configs/setting.yml &
 
 ###### 想说的话
-- 如果有问题或者BUG或者某个函数有更好的算法或者写法，欢迎提出issue||pr，共同进步
-- 如果这个项目有帮助到你的地方，欢迎star~
+- 如果有问题或者BUG或者某个函数有更好的算法或者写法，欢迎提出问题，共同进步
+- 如果这个项目有帮助到你的地方，帮忙点个star~
 
 <p align="center">
   <img  src="https://github.com/MarshallTeach/basic-antd/blob/main/assets/images/xmn.gif" width="200px" height="200px">
