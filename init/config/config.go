@@ -1,7 +1,6 @@
 package config
 
 import (
-	logger "basic-antd/pkg/logger"
 	"database/sql"
 	"fmt"
 	"github.com/spf13/viper"
@@ -16,8 +15,9 @@ var (
 	cfgDatabase    *viper.Viper
 	cfgApplication *viper.Viper
 	cfgJwt         *viper.Viper
-	cfgLogger      *viper.Viper
 	cfgRedis       *viper.Viper
+	cfgMail        *viper.Viper
+	cfgLogger      *viper.Viper
 )
 
 func Setup(path string) {
@@ -32,35 +32,41 @@ func Setup(path string) {
 		log.Fatal(fmt.Sprintf("Parse config file fail: %s", err.Error()))
 	}
 
-	cfgDatabase = viper.Sub("settings.database")
+	cfgDatabase = viper.Sub("setting.database")
 	if cfgDatabase == nil {
-		panic("No found settings.database in the configuration")
+		panic("No found setting.database in the configuration")
 	}
 	DatabaseConfig = InitDatabase(cfgDatabase)
 
-	cfgApplication = viper.Sub("settings.application")
+	cfgApplication = viper.Sub("setting.application")
 	if cfgApplication == nil {
 		panic("No found settings.application in the configuration")
 	}
 	ApplicationConfig = InitApplication(cfgApplication)
 
-	cfgJwt = viper.Sub("settings.jwt")
+	cfgJwt = viper.Sub("setting.jwt")
 	if cfgJwt == nil {
 		panic("No found settings.jwt in the configuration")
 	}
 	JwtConfig = InitJwt(cfgJwt)
 
-	cfgLogger = viper.Sub("settings.logger")
+	cfgLogger = viper.Sub("setting.logger")
 	if cfgLogger == nil {
 		panic("No found settings.logger in the configuration")
 	}
-	LoggerConfig = InitLog(cfgLogger)
+	LoggerConfig = InitLogger(cfgLogger)
 
-	cfgRedis = viper.Sub("settings.redis")
+	cfgRedis = viper.Sub("setting.redis")
 	if cfgRedis == nil {
 		panic("No found settings.redis in the configuration")
 	}
 	RedisConfig = InitRedis(cfgRedis)
+
+	cfgMail = viper.Sub("setting.mail")
+	if cfgMail == nil {
+		panic("No found settings.mail in the configuration")
+	}
+	MailConfig = InitMail(cfgMail)
 }
 
 type Config struct {
@@ -108,26 +114,6 @@ func (c *Config) SetEngine(engine http.Handler) {
 // GetEngine 获取路由引擎
 func (c *Config) GetEngine() http.Handler {
 	return c.engine
-}
-
-// SetLogger 设置日志组件
-func (c *Config) SetLogger(l logger.Logger) {
-	logger.DefaultLogger = l
-}
-
-// GetLogger 获取日志组件
-func (c *Config) GetLogger() logger.Logger {
-	return logger.DefaultLogger
-}
-
-// SetSaas 设置是否是saas应用
-func (c *Config) SetSaas(saas bool) {
-	c.saas = saas
-}
-
-// GetSaas 获取是否是saas应用
-func (c *Config) GetSaas() bool {
-	return c.saas
 }
 
 func DefaultConfig() *Config {

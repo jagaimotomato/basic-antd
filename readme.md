@@ -25,7 +25,7 @@
 ###### 项目启动
 - 新建"basic_antd"数据库，将config的sql文件导入数据库，修改config中的数据库用户名跟密码
 - go get
-- go run main.go link start
+- go run main.go start
 
 ###### 编译
 - windows: go build
@@ -35,7 +35,7 @@
 
 ###### 部署
 - windows: 双击exe文件运行
-- linux: nohup ./basic_antd link start -c config/settings.yml &
+- linux: nohup ./basic_antd start -c configs/setting.yml &
 
 ###### 代码有参考 wenjianzhang 大佬的 开源项目（基于element ui）
 - 传送门：
@@ -52,3 +52,6 @@
 ###### ToDo
 - 使用redis缓存优化代码
 - 加入im服务
+
+###### 更新日志
+- 优化项目结构

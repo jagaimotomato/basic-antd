@@ -3,22 +3,20 @@ package config
 import "github.com/spf13/viper"
 
 type Logger struct {
-	Path       string
-	Level      string
-	Stdout     bool
-	EnabledBUS bool
-	EnabledREQ bool
-	EnabledDB  bool
+	Level      string `json:"level"`
+	Filename   string `json:"filename"`
+	MaxSize    int    `json:"maxsize"`
+	MaxAge     int    `json:"max_age"`
+	MaxBackups int    `json:"max_backups"`
 }
 
-func InitLog(cfg *viper.Viper) *Logger {
+func InitLogger(cfg *viper.Viper) *Logger {
 	return &Logger{
-		Path:       cfg.GetString("path"),
-		Level:      cfg.GetString("level"),
-		Stdout:     cfg.GetBool("stdout"),
-		EnabledBUS: cfg.GetBool("enabledbus"),
-		EnabledREQ: cfg.GetBool("enabledreq"),
-		EnabledDB:  cfg.GetBool("enableddb"),
+		Level:      cfg.GetString("user"),
+		Filename:   cfg.GetString("filename"),
+		MaxSize:    cfg.GetInt("maxsize"),
+		MaxAge:     cfg.GetInt("maxage"),
+		MaxBackups: cfg.GetInt("maxbackups"),
 	}
 }
 

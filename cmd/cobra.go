@@ -2,8 +2,6 @@ package cmd
 
 import (
 	"basic-antd/cmd/api"
-	"basic-antd/cmd/config"
-	"basic-antd/cmd/migrate"
 	"basic-antd/init/global"
 	"basic-antd/tools"
 	"errors"
@@ -13,10 +11,10 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use:          "creative",
-	Short:        "creative",
+	Use:          "app",
+	Short:        "app",
 	SilenceUsage: true,
-	Long:         `creative`,
+	Long:         `application`,
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 1 {
 			tip()
@@ -33,14 +31,14 @@ var rootCmd = &cobra.Command{
 }
 
 func tip() {
-	usageStr := `欢迎使用 ` + tools.Green(`AdpvAdmin `+global.Version) + ` 可以使用 ` + tools.Red(`-h`) + ` 查看命令`
+	usageStr := `欢迎使用 ` + tools.Green(`App `+global.Version) + ` 可以使用 ` + tools.Red(`-h`) + ` 查看命令`
 	fmt.Printf("%s\n", usageStr)
 }
 
 func init() {
 	rootCmd.AddCommand(api.StartCmd)
-	rootCmd.AddCommand(migrate.StartCmd)
-	rootCmd.AddCommand(config.StartCmd)
+	/*rootCmd.AddCommand(migrate.StartCmd)
+	rootCmd.AddCommand(config.StartCmd)*/
 }
 
 func Execute() {

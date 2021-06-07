@@ -1,11 +1,12 @@
 package api
 
 import (
-	"basic-antd/app/router"
+	"basic-antd/init/cache"
 	"basic-antd/init/config"
 	"basic-antd/init/database"
 	"basic-antd/init/global"
 	"basic-antd/init/logger"
+	"basic-antd/internal/app/router"
 	"basic-antd/pkg/casbin"
 	"basic-antd/tools"
 	"context"
@@ -13,7 +14,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"io/ioutil"
+	"go.uber.org/zap"
 	"net/http"
 	"os"
 	"os/signal"
@@ -25,7 +26,7 @@ var (
 	port      string
 	mode      string
 	StartCmd  = &cobra.Command{
-		Use:          "link start",
+		Use:          "start",
 		Short:        "Start API server",
 		SilenceUsage: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
@@ -40,7 +41,7 @@ var (
 var AppRouters = make([]func(), 0)
 
 func init() {
-	StartCmd.PersistentFlags().StringVarP(&configYml, "config", "c", "config/settings.yml", "Start server with provided configuration file")
+	StartCmd.PersistentFlags().StringVarP(&configYml, "config", "c", "configs/setting.yml", "Start server with provided configuration file")
 	StartCmd.PersistentFlags().StringVarP(&port, "port", "p", "8000", "Tcp port server listening on")
 	StartCmd.PersistentFlags().StringVarP(&mode, "mode", "m", "dev", "server mode ; eg:dev,test,prod")
 
@@ -50,20 +51,22 @@ func init() {
 
 func setup() {
 	config.Setup(configYml)
-	logger.Setup()
+	err := logger.Setup()
+	if err != nil {
+		fmt.Println(err)
+	}
 	database.Setup()
 	global.CasbinEnforcer = casbin.Setup(global.Eloquent)
-	usageStr := `starting blog api server`
-	global.Logger.Info(usageStr)
+	cache.Setup()
+	// global.CasbinEnforcer = casbin.Setup(global.Eloquent)
+	usageStr := `starting api server`
+	zap.L().Info(usageStr)
+	tools.ClearLimit()
 }
 
 func run() error {
-	if viper.GetString("settings.application.mode") == string(tools.ModeProd) {
+	if viper.GetString("setting.application.mode") == string(tools.ModeProd) {
 		gin.SetMode(gin.ReleaseMode)
-	}
-	engine := global.Cfg.GetEngine()
-	if engine == nil {
-		engine = gin.New()
 	}
 
 	for _, f := range AppRouters {
@@ -71,17 +74,16 @@ func run() error {
 	}
 	srv := &http.Server{
 		Addr:    config.ApplicationConfig.Host + ":" + config.ApplicationConfig.Port,
-		Handler: global.Cfg.GetEngine(),
+		Handler: global.Engine,
 	}
 
 	go func() {
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			global.Logger.Fatal("listen: ", err)
+			zap.L().Fatal("listen: ",
+				zap.Error(err),
+			)
 		}
 	}()
-	/*go func() {
-
-	}()*/
 
 	/*go func() {
 		// 服务连接
@@ -95,32 +97,30 @@ func run() error {
 			}
 		}
 	}()*/
-	content, _ := ioutil.ReadFile("./assets/start.txt")
-	fmt.Println(tools.Red(string(content)))
+	/*content, _ := ioutil.ReadFile("./assets/start.txt")
+	fmt.Println(tools.Red(string(content)))*/
 	tip()
 	fmt.Println(tools.Green("Server run at:"))
 	fmt.Printf("-  Local:   http://localhost:%s/ \r\n", config.ApplicationConfig.Port)
 	fmt.Printf("-  Network: http://%s:%s/ \r\n", tools.GetLocalHost(), config.ApplicationConfig.Port)
-	//fmt.Printf("-  Redis: http://%s:%s/ \r\n", tools.GetLocalHost(), config.RedisConfig.Port)
-	/*	fmt.Println(tools.Green("Swagger run at:"))
-		fmt.Printf("-  Local:   http://localhost:%s/swagger/index.html \r\n", config.ApplicationConfig.Port)
-		fmt.Printf("-  Network: http://%s:%s/swagger/index.html \r\n", tools.GetLocalHost(), config.ApplicationConfig.Port)*/
-	fmt.Printf("%s Enter Control + C Shutdown Server \r\n", tools.GetCurrentTimeStr())
+	fmt.Printf("%s Enter Control + C Shutdown Server \r\n", time.Now().Format("2006-01-02 15:04:05"))
 	// 等待中断信号以优雅地关闭服务器（设置 5 秒的超时时间）
 	quit := make(chan os.Signal)
 	signal.Notify(quit, os.Interrupt)
 	<-quit
-	fmt.Printf("%s Shutdown Server ... \r\n", tools.GetCurrentTimeStr())
+	fmt.Printf("%s Shutdown Server ... \r\n", time.Now().Format("2006-01-02 15:04:05"))
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	if err := srv.Shutdown(ctx); err != nil {
-		global.Logger.Fatal("Server Shutdown:", err)
+		zap.L().Fatal("Server Shutdown:",
+			zap.Error(err),
+		)
 	}
-	global.Logger.Println("Server exiting")
+	zap.L().Info("Server exiting")
 	return nil
 }
 
 func tip() {
-	usageStr := `欢迎进入` + tools.Green(`AdpvAdmin`+global.Version) + "的世界" + `可以使用` + tools.Red("-h") + `查看命令`
+	usageStr := `欢迎进入` + tools.Green(`app`+global.Version) + "的世界" + `可以使用` + tools.Red("-h") + `查看命令`
 	fmt.Printf("%s \n\n", usageStr)
 }

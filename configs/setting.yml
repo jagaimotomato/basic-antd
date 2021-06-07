@@ -1,0 +1,38 @@
+setting:
+  application:
+    mode: dev
+    host: 0.0.0.0
+    name:
+    port: 8900
+  redis:
+    addr: localhost:6379
+    password:
+    db: 0
+  ssl:
+    #https 对应域名
+    domain: localhost:2887
+    #https 开关
+    enable: false
+    key:
+    pem:
+  logger:
+    filename: log/info
+    maxsize: 10240
+    maxage: 20
+    maxbackups: 20
+    # 日志等级
+    level: debug
+  jwt:
+    secret: edit
+    timeout: 168
+    rememberTimeout: 86400
+  database:
+    dirver: mysql
+    source: username:password@tcp(127.0.0.1:3306)/basic_antd?charset=utf8&parseTime=True&loc=Local&timeout=1000ms
+  # 邮箱配置
+  mail:
+    user:
+    password:
+    host:
+    port:
+    alias:
