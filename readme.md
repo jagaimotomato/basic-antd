@@ -37,10 +37,6 @@
 - windows: 双击exe文件运行
 - linux: nohup ./basic_antd start -c configs/setting.yml &
 
-###### 代码有参考 wenjianzhang 大佬的 开源项目（基于element ui）
-- 传送门：
-[go-admin-team](https://github.com/go-admin-team/go-admin)
-
 ###### 想说的话
 - 如果有问题或者BUG或者某个函数有更好的算法或者写法，欢迎提出issue||pr，共同进步
 - 如果这个项目有帮助到你的地方，欢迎star~
