@@ -81,12 +81,19 @@ func UpdateUser(c *gin.Context) {
 	result, err := user.Update()
 	tools.HasError(err, "", 500)
 	userIds[0] = user.UserId
-	err = ur.DeleteUserRole(userIds)
-	tools.HasError(err, msg.Failed, -1)
 	if len(user.RoleIds) > 0 {
+		err = ur.DeleteUserRole(userIds)
+		tools.HasError(err, msg.Failed, -1)
 		err = ur.Insert(user.UserId, user.RoleIds)
 		tools.HasError(err, msg.Failed, -1)
+	}
+	if len(user.DepartmentIds) > 0 {
+		err = du.DeleteDepartmentUser(userIds)
+		tools.HasError(err, msg.Failed, -1)
 		err = du.Insert(user.UserId, user.DepartmentIds)
+		tools.HasError(err, msg.Failed, -1)
+	} else {
+		err = du.DeleteDepartmentUser(userIds)
 		tools.HasError(err, msg.Failed, -1)
 	}
 	app.Success(c, result, msg.Success)
