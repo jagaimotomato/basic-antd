@@ -1,10 +1,10 @@
 package api
 
 import (
-	"basic-antd/internal/app/model"
-	"basic-antd/pkg/app"
-	"basic-antd/pkg/app/msg"
+	"basic-antd/model"
 	"basic-antd/pkg/jwt"
+	"basic-antd/pkg/response"
+	"basic-antd/pkg/response/msg"
 	"basic-antd/tools"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
@@ -15,7 +15,7 @@ func GetDictDataList(c *gin.Context) {
 	d.Type = c.Param("type")
 	result, count, err := d.GetList()
 	tools.HasError(err, msg.Failed, 500)
-	app.ListOk(c, result, count, msg.Success)
+	response.ListSuccess(c, result, count, msg.Success)
 }
 
 func GetDictDataPage(c *gin.Context) {
@@ -25,11 +25,11 @@ func GetDictDataPage(c *gin.Context) {
 		pageSize  = 10
 		err       error
 	)
-	if index := c.Request.FormValue("pageIndex"); index != "" {
+	if index := c.Request.FormValue("page_index"); index != "" {
 		pageIndex, err = tools.StringToInt(index)
 	}
 
-	if size := c.Request.FormValue("pageSize"); size != "" {
+	if size := c.Request.FormValue("page_size"); size != "" {
 		pageSize, err = tools.StringToInt(size)
 	}
 
@@ -40,7 +40,7 @@ func GetDictDataPage(c *gin.Context) {
 	d.DictCode, err = tools.StringToInt(c.Request.FormValue("dictCode"))
 	result, count, err := d.GetPage(pageIndex, pageSize)
 	tools.HasError(err, msg.Failed, 500)
-	app.PaginateOk(c, result, count, pageIndex, pageSize, msg.Success)
+	response.Paginate(c, result, count, pageIndex, pageSize, msg.Success)
 }
 
 func GetDictData(c *gin.Context) {
@@ -48,7 +48,7 @@ func GetDictData(c *gin.Context) {
 	d.DictCode, _ = tools.StringToInt(c.Param("dictCode"))
 	result, err := d.Get()
 	tools.HasError(err, msg.Failed, 500)
-	app.Success(c, result, msg.Success)
+	response.Success(c, result, msg.Success)
 }
 
 func CreateDictData(c *gin.Context) {
@@ -58,7 +58,7 @@ func CreateDictData(c *gin.Context) {
 	tools.HasError(err, msg.Failed, -1)
 	err = d.Insert()
 	tools.HasError(err, msg.Failed, 500)
-	app.Success(c, "", msg.Success)
+	response.Success(c, "", msg.Success)
 }
 
 func UpdateDictData(c *gin.Context) {
@@ -68,7 +68,7 @@ func UpdateDictData(c *gin.Context) {
 	tools.HasError(err, msg.Failed, -1)
 	result, err := d.Update()
 	tools.HasError(err, msg.Failed, 500)
-	app.Success(c, result, msg.Success)
+	response.Success(c, result, msg.Success)
 }
 
 func DeleteDictData(c *gin.Context) {
@@ -77,5 +77,5 @@ func DeleteDictData(c *gin.Context) {
 	ids := tools.IdStrToIdsGroup("dictCode", c)
 	err := d.Delete(ids)
 	tools.HasError(err, msg.Failed, 500)
-	app.Success(c, "", msg.Success)
+	response.Success(c, "", msg.Success)
 }

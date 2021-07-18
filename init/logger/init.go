@@ -2,13 +2,12 @@ package logger
 
 import (
 	"basic-antd/init/config"
+	"basic-antd/init/global"
 	"github.com/natefinch/lumberjack"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"os"
 )
-
-var lg *zap.Logger
 
 func Setup() (err error) {
 	writeSyncer := zapcore.AddSync(&lumberjack.Logger{
@@ -29,8 +28,8 @@ func Setup() (err error) {
 		zapcore.NewCore(consoleEncoder, zapcore.AddSync(os.Stdout), l),
 	)
 
-	lg = zap.New(core, zap.AddCaller())
-	zap.ReplaceGlobals(lg) // 替换zap包中全局的logger实例，后续在其他包中只需使用zap.L()调用即可
+	global.Lg = zap.New(core, zap.AddCaller())
+	zap.ReplaceGlobals(global.Lg) // 替换zap包中全局的logger实例，后续在其他包中只需使用zap.L()调用即可
 	return
 }
 

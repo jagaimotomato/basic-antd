@@ -1,10 +1,10 @@
 package api
 
 import (
-	"basic-antd/internal/app/model"
-	"basic-antd/pkg/app"
-	"basic-antd/pkg/app/msg"
+	"basic-antd/model"
 	"basic-antd/pkg/jwt"
+	"basic-antd/pkg/response"
+	"basic-antd/pkg/response/msg"
 	"basic-antd/tools"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
@@ -17,18 +17,18 @@ func GetPermissionPage(c *gin.Context) {
 		pageIndex = 1
 		pageSize  = 10
 	)
-	index := c.Request.FormValue("pageIndex")
+	index := c.Request.FormValue("page_index")
 	if index != "" {
 		pageIndex, _ = tools.StringToInt(index)
 	}
-	size := c.Request.FormValue("pageSize")
+	size := c.Request.FormValue("page_size")
 	if size != "" {
 		pageSize, _ = tools.StringToInt(size)
 	}
 	p.Title = c.Request.FormValue("title")
 	permissions, count, err := p.GetRecursionPermission(pageIndex, pageSize)
 	tools.HasError(err, msg.Failed, 500)
-	app.PaginateOk(c, permissions, count, pageIndex, pageSize, msg.Success)
+	response.Paginate(c, permissions, count, pageIndex, pageSize, msg.Success)
 }
 
 /* 选择框数据 */
@@ -39,7 +39,7 @@ func GetPermissionList(c *gin.Context) {
 	p.Title = c.Request.FormValue("title")
 	permissions, err := p.SetPermission()
 	tools.HasError(err, msg.Failed, 500)
-	app.Success(c, permissions, msg.Success)
+	response.Success(c, permissions, msg.Success)
 }
 
 func GetPermission(c *gin.Context) {
@@ -51,7 +51,7 @@ func GetPermission(c *gin.Context) {
 	p.PermissionId = Id
 	permission, err := p.GetPermission()
 	tools.HasError(err, msg.Failed, 500)
-	app.Success(c, permission, msg.Success)
+	response.Success(c, permission, msg.Success)
 }
 
 func GetPermissionTree(c *gin.Context) {
@@ -60,7 +60,7 @@ func GetPermissionTree(c *gin.Context) {
 	)
 	permissions, err := p.GetAllPermission()
 	tools.HasError(err, msg.Failed, 500)
-	app.Success(c, permissions, msg.Success)
+	response.Success(c, permissions, msg.Success)
 }
 
 func GetRolePermissionTree(c *gin.Context) {
@@ -68,7 +68,7 @@ func GetRolePermissionTree(c *gin.Context) {
 	tools.HasError(err, msg.Failed, -1)
 	permissionIds, err := model.GetRolePermissionIds(roleId)
 	tools.HasError(err, msg.Failed, 500)
-	app.Success(c, permissionIds, msg.Success)
+	response.Success(c, permissionIds, msg.Success)
 }
 
 func CreatePermission(c *gin.Context) {
@@ -92,7 +92,7 @@ func CreatePermission(c *gin.Context) {
 		err = p.BatchInsert(&ps)
 	}*/
 	tools.HasError(err, msg.Failed, 500)
-	app.Success(c, "", msg.Success)
+	response.Success(c, "", msg.Success)
 }
 
 func UpdatePermission(c *gin.Context) {
@@ -122,7 +122,7 @@ func UpdatePermission(c *gin.Context) {
 	}*/
 	err = p.Update()
 	tools.HasError(err, msg.Failed, 500)
-	app.Success(c, "", msg.Success)
+	response.Success(c, "", msg.Success)
 }
 
 func DeletePermission(c *gin.Context) {
@@ -135,5 +135,5 @@ func DeletePermission(c *gin.Context) {
 	p.UpdatedBy = jwt.GetUserIdStr(c)
 	err = p.Delete()
 	tools.HasError(err, msg.Failed, 500)
-	app.Success(c, "", msg.Success)
+	response.Success(c, "", msg.Success)
 }

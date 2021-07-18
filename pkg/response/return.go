@@ -1,4 +1,4 @@
-package app
+package response
 
 import (
 	"basic-antd/tools"
@@ -6,29 +6,29 @@ import (
 	"net/http"
 )
 
-func ResponseError(c *gin.Context, code int, err error, msg string) {
+func Error(c *gin.Context, code int, err error, msg string) {
 	var res Response
 	if err != nil {
-		res.Message = err.Error()
+		res.Msg = err.Error()
 	}
 	if msg != "" {
-		res.Message = msg
+		res.Msg = msg
 	}
 	res.RequestId = tools.GenerateMsgIdFromContext(c)
-	c.AbortWithStatusJSON(http.StatusOK, res.ReturnError(code))
+	c.AbortWithStatusJSON(http.StatusOK, res.Error(code))
 }
 
 func Success(c *gin.Context, data interface{}, msg string) {
 	var res Response
 	res.Result = data
 	if msg != "" {
-		res.Message = msg
+		res.Msg = msg
 	}
 	res.RequestId = tools.GenerateMsgIdFromContext(c)
-	c.AbortWithStatusJSON(http.StatusOK, res.ReturnSuccess())
+	c.AbortWithStatusJSON(http.StatusOK, res.Success())
 }
 
-func PaginateOk(c *gin.Context, result interface{}, count int64, pageIndex, pageSize int, msg string) {
+func Paginate(c *gin.Context, result interface{}, count int64, pageIndex, pageSize int, msg string) {
 	var res Page
 	res.List = result
 	res.Count = count
@@ -37,7 +37,7 @@ func PaginateOk(c *gin.Context, result interface{}, count int64, pageIndex, page
 	Success(c, res, msg)
 }
 
-func ListOk(c *gin.Context, result interface{}, count int64, msg string) {
+func ListSuccess(c *gin.Context, result interface{}, count int64, msg string) {
 	var res List
 	res.List = result
 	res.Count = count

@@ -1,10 +1,10 @@
 package api
 
 import (
-	"basic-antd/internal/app/model"
-	"basic-antd/pkg/app"
-	"basic-antd/pkg/app/msg"
+	"basic-antd/model"
 	"basic-antd/pkg/jwt"
+	"basic-antd/pkg/response"
+	"basic-antd/pkg/response/msg"
 	"basic-antd/tools"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
@@ -16,11 +16,11 @@ func GetRolePage(c *gin.Context) {
 		pageIndex = 1
 		pageSize  = 10
 	)
-	index := c.Request.FormValue("pageIndex")
+	index := c.Request.FormValue("page_index")
 	if index != "" {
 		pageIndex, _ = tools.StringToInt(index)
 	}
-	size := c.Request.FormValue("pageSize")
+	size := c.Request.FormValue("page_size")
 	if size != "" {
 		pageSize, _ = tools.StringToInt(size)
 	}
@@ -30,14 +30,14 @@ func GetRolePage(c *gin.Context) {
 	r.Status = c.Request.FormValue("status")
 	result, count, err := r.GetRolePermissionPage(pageIndex, pageSize)
 	tools.HasError(err, msg.Failed, 500)
-	app.PaginateOk(c, result, count, pageIndex, pageSize, msg.Success)
+	response.Paginate(c, result, count, pageIndex, pageSize, msg.Success)
 }
 
 func GetRoleList(c *gin.Context) {
 	var r model.Role
 	roleList, err := r.GetList()
 	tools.HasError(err, msg.Failed, 500)
-	app.Success(c, roleList, msg.Success)
+	response.Success(c, roleList, msg.Success)
 }
 
 func GetRole(c *gin.Context) {
@@ -45,7 +45,7 @@ func GetRole(c *gin.Context) {
 	r.RoleId, _ = tools.StringToInt(c.Param("roleId"))
 	role, err := r.Get()
 	tools.HasError(err, msg.Failed, 500)
-	app.Success(c, role, msg.Success)
+	response.Success(c, role, msg.Success)
 }
 
 func CreateRole(c *gin.Context) {
@@ -62,7 +62,11 @@ func CreateRole(c *gin.Context) {
 		err = rp.Insert(roleId, r.PermissionIds)
 		tools.HasError(err, msg.Failed, 500)
 	}
-	app.Success(c, "", msg.Success)
+	if len(r.Apis) > 0 {
+		err = rp.InsertCasbin(roleId, r.Apis)
+		tools.HasError(err, msg.Failed, 500)
+	}
+	response.Success(c, "", msg.Success)
 }
 
 func UpdateRole(c *gin.Context) {
@@ -83,7 +87,11 @@ func UpdateRole(c *gin.Context) {
 		err = rp.Insert(r.RoleId, r.PermissionIds)
 		tools.HasError(err, msg.Failed, 500)
 	}
-	app.Success(c, "", msg.Success)
+	if len(r.Apis) > 0 {
+		err = rp.InsertCasbin(r.RoleId, r.Apis)
+		tools.HasError(err, msg.Failed, 500)
+	}
+	response.Success(c, "", msg.Success)
 }
 
 func UpdateRoleStatus(c *gin.Context) {
@@ -93,7 +101,7 @@ func UpdateRoleStatus(c *gin.Context) {
 	r.UpdatedBy = jwt.GetUserIdStr(c)
 	err := r.Update()
 	tools.HasError(err, msg.Failed, 500)
-	app.Success(c, "", msg.Success)
+	response.Success(c, "", msg.Success)
 }
 
 func DeleteRole(c *gin.Context) {
@@ -105,11 +113,11 @@ func DeleteRole(c *gin.Context) {
 	roleIds := tools.IdStrToIdsGroup("roleId", c)
 	err := r.Delete(roleIds)
 	if err != nil {
-		app.ResponseError(c, 400, err, "")
+		response.Error(c, 400, err, "")
 		return
 	} else {
 		err = rp.DeleteRolePermission(roleIds)
 		tools.HasError(err, msg.Failed, 500)
-		app.Success(c, "", msg.Success)
+		response.Success(c, "", msg.Success)
 	}
 }

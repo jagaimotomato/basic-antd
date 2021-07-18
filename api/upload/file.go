@@ -1,8 +1,8 @@
 package upload
 
 import (
-	"basic-antd/pkg/app"
 	"basic-antd/pkg/jwt"
+	"basic-antd/pkg/response"
 	"basic-antd/tools"
 	"errors"
 	"fmt"
@@ -22,37 +22,37 @@ func UploadFile(c *gin.Context) {
 	fileType, _ := c.GetPostForm("type")
 	urlPerfix := fmt.Sprintf("http://%s/", c.Request.Host)
 	if fileType == "" {
-		app.ResponseError(c, 200, errors.New(""), "缺少文件类型")
+		response.Error(c, 200, errors.New(""), "缺少文件类型")
 		return
 	} else {
 		switch fileType {
 		case "1": // 单文件
-			response, result := singleFile(c, urlPerfix)
+			res, result := singleFile(c, urlPerfix)
 			if !result {
 				return
 			}
-			app.Success(c, response, "上传成功")
+			response.Success(c, res, "上传成功")
 			return
 		case "2":
 			multipartFile := multipleFile(c, urlPerfix)
-			app.Success(c, multipartFile, "上传成功")
+			response.Success(c, multipartFile, "上传成功")
 			return
 		case "3": // 头像
-			response, result := avatar(c, urlPerfix)
+			res, result := avatar(c, urlPerfix)
 			if !result {
 				return
 			}
-			app.Success(c, response, "上传成功")
+			response.Success(c, res, "上传成功")
 			return
 		}
 	}
 }
 
-func avatar(c *gin.Context, urlPerfix string) (response FileResponse, success bool) {
+func avatar(c *gin.Context, urlPerfix string) (res FileResponse, success bool) {
 	file, err := c.FormFile("file")
 	if err != nil {
-		app.ResponseError(c, 200, errors.New(""), "图片不能为空")
-		return response, false
+		response.Error(c, 200, errors.New(""), "图片不能为空")
+		return res, false
 	}
 	id := uuid.New().String()
 	fileName := id + ".jpg"
@@ -67,22 +67,22 @@ func avatar(c *gin.Context, urlPerfix string) (response FileResponse, success bo
 	singleFile := path + fileName
 	_ = c.SaveUploadedFile(file, singleFile)
 	fileType, _ := tools.GetType(singleFile)
-	response = FileResponse{
+	res = FileResponse{
 		Size:     tools.GetFileSize(singleFile),
 		Path:     singleFile,
 		FullPath: urlPerfix + singleFile,
 		Name:     file.Filename,
 		Type:     fileType,
 	}
-	return response, true
+	return res, true
 }
 
-func singleFile(c *gin.Context, urlPerfix string) (response FileResponse, success bool) {
+func singleFile(c *gin.Context, urlPerfix string) (res FileResponse, success bool) {
 	file, err := c.FormFile("file")
 	dir, _ := c.GetPostForm("dir")
 	if err != nil {
-		app.ResponseError(c, 200, errors.New(""), "图片不能为空")
-		return response, false
+		response.Error(c, 200, errors.New(""), "图片不能为空")
+		return res, false
 	}
 	id := uuid.New().String()
 	fileName := id + tools.GetExt(file.Filename)
@@ -97,14 +97,14 @@ func singleFile(c *gin.Context, urlPerfix string) (response FileResponse, succes
 	singleFile := path + fileName
 	_ = c.SaveUploadedFile(file, singleFile)
 	fileType, _ := tools.GetType(singleFile)
-	response = FileResponse{
+	res = FileResponse{
 		Size:     tools.GetFileSize(singleFile),
 		Path:     singleFile,
 		FullPath: urlPerfix + singleFile,
 		Name:     file.Filename,
 		Type:     fileType,
 	}
-	return response, true
+	return res, true
 }
 
 func multipleFile(c *gin.Context, urlPerfix string) []FileResponse {
@@ -124,7 +124,7 @@ func multipleFile(c *gin.Context, urlPerfix string) []FileResponse {
 		err := c.SaveUploadedFile(f, multipartFileName)
 		fileType, _ := tools.GetType(multipartFileName)
 		if err != nil {
-			app.ResponseError(c, 200, errors.New(""), "上传失败")
+			response.Error(c, 200, errors.New(""), "上传失败")
 		}
 		fileRes := FileResponse{
 			Size:     tools.GetFileSize(multipartFileName),
@@ -145,7 +145,7 @@ func multipleFile(c *gin.Context, urlPerfix string) []FileResponse {
 	result["accessKey"] = config.OssConfig.AccessKey
 	result["endpoint"] = config.OssConfig.Endpoint
 	result["bucketName"] = config.OssConfig.BucketName
-	app.Success(c, result, "")
+	response.Success(c, result, "")
 }
 
 func GetQiNiuToken(c *gin.Context) {
@@ -155,6 +155,6 @@ func GetQiNiuToken(c *gin.Context) {
 	}
 	mac := qbox.NewMac(config.QiniuConfig.AccessKey, config.QiniuConfig.SecretKey)
 	upToken := putPolicy.UploadToken(mac)
-	app.Success(c, upToken, "")
+	response.Success(c, upToken, "")
 }
 */

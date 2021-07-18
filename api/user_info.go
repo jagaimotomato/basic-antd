@@ -1,10 +1,10 @@
 package api
 
 import (
-	"basic-antd/internal/app/model"
-	"basic-antd/pkg/app"
-	"basic-antd/pkg/app/msg"
+	"basic-antd/model"
 	"basic-antd/pkg/jwt"
+	"basic-antd/pkg/response"
+	"basic-antd/pkg/response/msg"
 	"basic-antd/tools"
 	"errors"
 	"fmt"
@@ -67,7 +67,7 @@ func GetUserInfo(c *gin.Context) {
 		role["id"] = v.RoleKey
 		userInfo.Role = append(userInfo.Role, role)
 	}
-	app.Success(c, userInfo, msg.Success)
+	response.Success(c, userInfo, msg.Success)
 }
 
 func GetUserNav(c *gin.Context) {
@@ -91,7 +91,7 @@ func GetUserNav(c *gin.Context) {
 		menus, err = menu.GetMenus(roleIds)
 		tools.HasError(err, msg.Failed, -1)
 	}
-	app.Success(c, menus, msg.Success)
+	response.Success(c, menus, msg.Success)
 }
 
 /* 个人中心获取本人信息 */
@@ -102,7 +102,7 @@ func GetAccountInfo(c *gin.Context) {
 	)
 	user, err := u.GetUserById(jwt.GetUserId(c))
 	tools.HasError(err, msg.Failed, 500)
-	app.Success(c, user, msg.Success)
+	response.Success(c, user, msg.Success)
 }
 
 /* 更新密码 */
@@ -117,7 +117,7 @@ func UpdateAccountPassword(c *gin.Context) {
 	user, err := u.GetUserById(jwt.GetUserId(c))
 	tools.HasError(err, msg.Failed, 500)
 	if !tools.Verify(user.Password, p.Old, user.Salt) {
-		app.ResponseError(c, 403, errors.New("旧密码错误"), "")
+		response.Error(c, 403, errors.New("旧密码错误"), "")
 		return
 	}
 	u.Password, u.Salt, err = tools.GeneratePassword(p.New)
@@ -125,7 +125,7 @@ func UpdateAccountPassword(c *gin.Context) {
 	u.UserId = jwt.GetUserId(c)
 	user, err = u.Update()
 	tools.HasError(err, msg.Failed, 500)
-	app.Success(c, user, msg.Success)
+	response.Success(c, user, msg.Success)
 }
 
 /* 更新个人信息 */
@@ -139,12 +139,12 @@ func UpdateAccountInfo(c *gin.Context) {
 	u.UserId = jwt.GetUserId(c)
 	user, err := u.Update()
 	tools.HasError(err, msg.Failed, 500)
-	app.Success(c, user, msg.Success)
+	response.Success(c, user, msg.Success)
 }
 
 func GetSaltPassword(c *gin.Context) {
 	pass, salt, _ := tools.GeneratePassword("123456")
-	app.Custom(c, gin.H{
+	response.Custom(c, gin.H{
 		"password": pass,
 		"salt":     salt,
 	})

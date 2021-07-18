@@ -1,10 +1,10 @@
 package api
 
 import (
-	"basic-antd/internal/app/model"
-	"basic-antd/pkg/app"
-	"basic-antd/pkg/app/msg"
+	"basic-antd/model"
 	"basic-antd/pkg/jwt"
+	"basic-antd/pkg/response"
+	"basic-antd/pkg/response/msg"
 	"basic-antd/tools"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
@@ -15,7 +15,7 @@ func GetDepartment(c *gin.Context) {
 	d.DepartmentId, _ = tools.StringToInt(c.Param("department_id"))
 	d, err := d.Get()
 	tools.HasError(err, msg.Failed, 500)
-	app.Success(c, d, msg.Success)
+	response.Success(c, d, msg.Success)
 }
 
 func GetDepartmentPage(c *gin.Context) {
@@ -25,15 +25,15 @@ func GetDepartmentPage(c *gin.Context) {
 		pageSize  = 10
 		err       error
 	)
-	if index := c.Request.FormValue("pageIndex"); index != "" {
+	if index := c.Request.FormValue("page_index"); index != "" {
 		pageIndex, _ = tools.StringToInt(index)
 	}
-	if size := c.Request.FormValue("pageSize"); size != "" {
+	if size := c.Request.FormValue("page_size"); size != "" {
 		pageSize, _ = tools.StringToInt(size)
 	}
 	result, count, err := d.GetPage(pageIndex, pageSize)
 	tools.HasError(err, msg.Failed, 500)
-	app.PaginateOk(c, result, count, pageIndex, pageSize, msg.Success)
+	response.Paginate(c, result, count, pageIndex, pageSize, msg.Success)
 }
 
 func GetDepartmentTree(c *gin.Context) {
@@ -44,7 +44,7 @@ func GetDepartmentTree(c *gin.Context) {
 	d.Name = c.Request.FormValue("name")
 	department, err := d.GetDepartmentTree()
 	tools.HasError(err, msg.Failed, 500)
-	app.Success(c, department, msg.Success)
+	response.Success(c, department, msg.Success)
 }
 
 func CreateDepartment(c *gin.Context) {
@@ -54,7 +54,7 @@ func CreateDepartment(c *gin.Context) {
 	d.CreatedBy = jwt.GetUserIdStr(c)
 	err = d.Insert()
 	tools.HasError(err, msg.Failed, 500)
-	app.Success(c, "", msg.Success)
+	response.Success(c, "", msg.Success)
 }
 
 func UpdateDepartment(c *gin.Context) {
@@ -63,7 +63,7 @@ func UpdateDepartment(c *gin.Context) {
 	tools.HasError(err, msg.BindingFailed, -1)
 	err = d.Update()
 	tools.HasError(err, msg.Failed, 500)
-	app.Success(c, "", msg.Success)
+	response.Success(c, "", msg.Success)
 }
 
 func DeleteDepartment(c *gin.Context) {
@@ -71,5 +71,5 @@ func DeleteDepartment(c *gin.Context) {
 	ids := tools.IdStrToIdsGroup("department_id", c)
 	err := d.Delete(ids)
 	tools.HasError(err, msg.Failed, 500)
-	app.Success(c, "", msg.Success)
+	response.Success(c, "", msg.Success)
 }

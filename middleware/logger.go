@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"basic-antd/internal/app/model"
+	"basic-antd/model"
 	"basic-antd/pkg/jwt"
 	"basic-antd/tools"
 	"fmt"

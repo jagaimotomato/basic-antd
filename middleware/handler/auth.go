@@ -1,9 +1,9 @@
 package handler
 
 import (
-	"basic-antd/internal/app/model"
-	"basic-antd/pkg/app"
+	"basic-antd/model"
 	"basic-antd/pkg/jwt"
+	"basic-antd/pkg/response"
 	"basic-antd/tools"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -114,7 +114,7 @@ func Logout(c *gin.Context) {
 	msg := "退出登录"
 	username := jwt.GetUserName(c)
 	LoginLogoutToDb(c, status, msg, username)
-	app.Success(c, "", "退出成功")
+	response.Success(c, "", "退出成功")
 }
 
 func LoginLogoutToDb(c *gin.Context, status, msg, username string) {

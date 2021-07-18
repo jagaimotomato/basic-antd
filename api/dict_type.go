@@ -1,10 +1,10 @@
 package api
 
 import (
-	"basic-antd/internal/app/model"
-	"basic-antd/pkg/app"
-	"basic-antd/pkg/app/msg"
+	"basic-antd/model"
 	"basic-antd/pkg/jwt"
+	"basic-antd/pkg/response"
+	"basic-antd/pkg/response/msg"
 	"basic-antd/tools"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
@@ -17,7 +17,7 @@ func GetDictTypeList(c *gin.Context) {
 	d.DictId, _ = tools.StringToInt(c.Param("dictId"))
 	result, count, err := d.GetList()
 	tools.HasError(err, msg.Failed, 500)
-	app.ListOk(c, result, count, msg.Success)
+	response.ListSuccess(c, result, count, msg.Success)
 }
 
 func GetDictTypePage(c *gin.Context) {
@@ -27,10 +27,10 @@ func GetDictTypePage(c *gin.Context) {
 		pageSize  = 10
 		err       error
 	)
-	if index := c.Request.FormValue("pageIndex"); index != "" {
+	if index := c.Request.FormValue("page_index"); index != "" {
 		pageIndex, err = tools.StringToInt(index)
 	}
-	if size := c.Request.FormValue("pageSize"); size != "" {
+	if size := c.Request.FormValue("page_size"); size != "" {
 		pageSize, err = tools.StringToInt(size)
 	}
 	d.DictId, err = tools.StringToInt(c.Request.FormValue("dictId"))
@@ -39,7 +39,7 @@ func GetDictTypePage(c *gin.Context) {
 	d.Status = c.Request.FormValue("status")
 	result, count, err := d.GetPage(pageIndex, pageSize)
 	tools.HasError(err, msg.Failed, 500)
-	app.PaginateOk(c, result, count, pageIndex, pageSize, msg.Success)
+	response.Paginate(c, result, count, pageIndex, pageSize, msg.Success)
 }
 
 func GetDictType(c *gin.Context) {
@@ -48,7 +48,7 @@ func GetDictType(c *gin.Context) {
 	d.DictId, _ = tools.StringToInt(c.Param("dictId"))
 	result, err := d.Get()
 	tools.HasError(err, msg.Failed, 500)
-	app.Success(c, result, msg.Success)
+	response.Success(c, result, msg.Success)
 }
 
 func CreateDictType(c *gin.Context) {
@@ -58,7 +58,7 @@ func CreateDictType(c *gin.Context) {
 	tools.HasError(err, msg.Failed, -1)
 	err = d.Insert()
 	tools.HasError(err, msg.Failed, 500)
-	app.Success(c, "", msg.Success)
+	response.Success(c, "", msg.Success)
 }
 
 func UpdateDictType(c *gin.Context) {
@@ -68,7 +68,7 @@ func UpdateDictType(c *gin.Context) {
 	tools.HasError(err, msg.Failed, -1)
 	result, err := d.Update()
 	tools.HasError(err, msg.Failed, 500)
-	app.Success(c, result, msg.Success)
+	response.Success(c, result, msg.Success)
 }
 
 func DeleteDictType(c *gin.Context) {
@@ -77,5 +77,5 @@ func DeleteDictType(c *gin.Context) {
 	ids := tools.IdStrToIdsGroup("dictId", c)
 	err := d.Delete(ids)
 	tools.HasError(err, msg.Failed, 500)
-	app.Success(c, "", msg.Success)
+	response.Success(c, "", msg.Success)
 }

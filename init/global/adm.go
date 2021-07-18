@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	Logger   *zap.Logger
+	Lg       *zap.Logger
 	Eloquent *gorm.DB
 	Version  = "1.0.0"
 	Engine   = gin.New()

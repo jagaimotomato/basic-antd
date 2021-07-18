@@ -1,10 +1,10 @@
 package api
 
 import (
-	"basic-antd/internal/app/model"
-	"basic-antd/pkg/app"
-	"basic-antd/pkg/app/msg"
+	"basic-antd/model"
 	"basic-antd/pkg/jwt"
+	"basic-antd/pkg/response"
+	"basic-antd/pkg/response/msg"
 	"basic-antd/tools"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
@@ -17,11 +17,11 @@ func GetUserPage(c *gin.Context) {
 		pageIndex = 1
 		err       error
 	)
-	size := c.Request.FormValue("pageSize")
+	size := c.Request.FormValue("page_size")
 	if size != "" {
 		pageSize, err = tools.StringToInt(size)
 	}
-	index := c.Request.FormValue("pageIndex")
+	index := c.Request.FormValue("page_index")
 	if index != "" {
 		pageIndex, err = tools.StringToInt(index)
 	}
@@ -32,7 +32,7 @@ func GetUserPage(c *gin.Context) {
 	user.DepartmentId, err = tools.StringToInt(c.Request.FormValue("departmentId"))
 	result, count, err := user.GetPage(pageSize, pageIndex)
 	tools.HasError(err, "", 500)
-	app.PaginateOk(c, result, count, pageIndex, pageSize, msg.Success)
+	response.Paginate(c, result, count, pageIndex, pageSize, msg.Success)
 }
 
 func GetUser(c *gin.Context) {
@@ -40,7 +40,7 @@ func GetUser(c *gin.Context) {
 	userId, _ := tools.StringToInt(c.Param("userId"))
 	user, err := user.GetUserById(userId)
 	tools.HasError(err, "", 500)
-	app.Success(c, user, msg.Success)
+	response.Success(c, user, msg.Success)
 }
 
 func CreateUser(c *gin.Context) {
@@ -65,7 +65,7 @@ func CreateUser(c *gin.Context) {
 		err = du.Insert(userId, user.DepartmentIds)
 		tools.HasError(err, msg.Failed, 500)
 	}
-	app.Success(c, "", msg.Success)
+	response.Success(c, "", msg.Success)
 }
 
 func UpdateUser(c *gin.Context) {
@@ -96,7 +96,7 @@ func UpdateUser(c *gin.Context) {
 		err = du.DeleteDepartmentUser(userIds)
 		tools.HasError(err, msg.Failed, -1)
 	}
-	app.Success(c, result, msg.Success)
+	response.Success(c, result, msg.Success)
 }
 
 func UpdateUserStatus(c *gin.Context) {
@@ -106,7 +106,7 @@ func UpdateUserStatus(c *gin.Context) {
 	u.UpdatedBy = jwt.GetUserIdStr(c)
 	result, err := u.Update()
 	tools.HasError(err, msg.Failed, 500)
-	app.Success(c, result, msg.Success)
+	response.Success(c, result, msg.Success)
 }
 
 func DeleteUser(c *gin.Context) {
@@ -120,13 +120,13 @@ func DeleteUser(c *gin.Context) {
 	Ids := tools.IdStrToIdsGroup("userId", c)
 	err := user.BatchDelete(Ids)
 	if err != nil {
-		app.ResponseError(c, 400, err, "")
+		response.Error(c, 400, err, "")
 		return
 	} else {
 		err = ur.DeleteUserRole(Ids)
 		tools.HasError(err, msg.Failed, 500)
 		err = du.DeleteDepartmentUser(Ids)
 		tools.HasError(err, msg.Failed, 500)
-		app.Success(c, "", msg.Success)
+		response.Success(c, "", msg.Success)
 	}
 }

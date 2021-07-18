@@ -1,13 +1,10 @@
 package api
 
 import (
-	"basic-antd/init/cache"
+	initialize "basic-antd/init"
 	"basic-antd/init/config"
-	"basic-antd/init/database"
 	"basic-antd/init/global"
-	"basic-antd/init/logger"
-	"basic-antd/internal/app/router"
-	"basic-antd/pkg/casbin"
+	"basic-antd/router"
 	"basic-antd/tools"
 	"context"
 	"fmt"
@@ -26,7 +23,7 @@ var (
 	port      string
 	mode      string
 	StartCmd  = &cobra.Command{
-		Use:          "start",
+		Use:          "serve",
 		Short:        "Start API server",
 		SilenceUsage: true,
 		PreRun: func(cmd *cobra.Command, args []string) {
@@ -41,7 +38,7 @@ var (
 var AppRouters = make([]func(), 0)
 
 func init() {
-	StartCmd.PersistentFlags().StringVarP(&configYml, "config", "c", "configs/setting.yml", "Start server with provided configuration file")
+	StartCmd.PersistentFlags().StringVarP(&configYml, "config", "c", "config/setting.yml", "Start server with provided configuration file")
 	StartCmd.PersistentFlags().StringVarP(&port, "port", "p", "8000", "Tcp port server listening on")
 	StartCmd.PersistentFlags().StringVarP(&mode, "mode", "m", "dev", "server mode ; eg:dev,test,prod")
 
@@ -50,15 +47,7 @@ func init() {
 }
 
 func setup() {
-	config.Setup(configYml)
-	err := logger.Setup()
-	if err != nil {
-		fmt.Println(err)
-	}
-	database.Setup()
-	global.CasbinEnforcer = casbin.Setup(global.Eloquent)
-	cache.Setup()
-	// global.CasbinEnforcer = casbin.Setup(global.Eloquent)
+	initialize.ApiApplication(configYml)
 	usageStr := `starting api server`
 	zap.L().Info(usageStr)
 	tools.ClearLimit()
@@ -121,6 +110,6 @@ func run() error {
 }
 
 func tip() {
-	usageStr := `欢迎进入` + tools.Green(`app`+global.Version) + "的世界" + `可以使用` + tools.Red("-h") + `查看命令`
+	usageStr := `欢迎进入` + tools.Green(`response`+global.Version) + "的世界" + `可以使用` + tools.Red("-h") + `查看命令`
 	fmt.Printf("%s \n\n", usageStr)
 }

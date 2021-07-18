@@ -28,7 +28,7 @@ setting:
     rememberTimeout: 86400
   database:
     dirver: mysql
-    source: username:password@tcp(127.0.0.1:3306)/basic_antd?charset=utf8&parseTime=True&loc=Local&timeout=1000ms
+    source: root:root@tcp(127.0.0.1:3306)/basic_antd?charset=utf8&parseTime=True&loc=Local&timeout=1000ms
   # 邮箱配置
   mail:
     user:

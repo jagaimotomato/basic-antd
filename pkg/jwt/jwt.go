@@ -297,7 +297,7 @@ func (mw *GinJWTMiddleware) usingPublicKeyAlgo() bool {
 	return false
 }
 
-// MiddlewareInit initialize jwt configs.
+// MiddlewareInit initialize jwt config.
 func (mw *GinJWTMiddleware) MiddlewareInit() error {
 
 	if mw.TokenLookup == "" {

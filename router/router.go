@@ -2,7 +2,7 @@ package router
 
 import (
 	"basic-antd/init/global"
-	"basic-antd/internal/app/middleware"
+	middleware2 "basic-antd/middleware"
 	"basic-antd/tools"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -11,8 +11,8 @@ import (
 
 func InitRouter() {
 	r := global.Engine
-	middleware.InitMiddleware(r)
-	authMiddleware, err := middleware.AuthInit()
+	middleware2.InitMiddleware(r)
+	authMiddleware, err := middleware2.AuthInit()
 	tools.HasError(err, "Jwt init error", 500)
 	initAppRouter(r, authMiddleware)
 	r.GET("/ping", func(c *gin.Context) {

@@ -3,8 +3,8 @@ package router
 import (
 	"basic-antd/api"
 	"basic-antd/api/upload"
-	"basic-antd/internal/app/middleware"
-	"basic-antd/internal/app/middleware/handler"
+	"basic-antd/middleware"
+	handler2 "basic-antd/middleware/handler"
 	"basic-antd/pkg/jwt"
 	"github.com/gin-gonic/gin"
 )
@@ -46,7 +46,7 @@ func registerAuthRouter(v1 *gin.RouterGroup, auth *jwt.GinJWTMiddleware) {
 }
 
 func registerLogoutRouter(v1 *gin.RouterGroup, auth *jwt.GinJWTMiddleware) {
-	v1.Use(auth.MiddlewareFunc()).POST("/logout", handler.Logout)
+	v1.Use(auth.MiddlewareFunc()).POST("/logout", handler2.Logout)
 }
 
 func registerUserInfoRouter(v1 *gin.RouterGroup, auth *jwt.GinJWTMiddleware) {
@@ -71,6 +71,7 @@ func registerSystemPageRouter(g *gin.RouterGroup, auth *jwt.GinJWTMiddleware) {
 		pageGroup.GET("/operationLog", api.GetOperationLogPage)
 		pageGroup.GET("/dictType", api.GetDictTypePage)
 		pageGroup.GET("/dictData", api.GetDictDataPage)
+		pageGroup.GET("/api", api.GetApiPage)
 	}
 }
 
@@ -82,6 +83,8 @@ func registerSystemListRouter(g *gin.RouterGroup, auth *jwt.GinJWTMiddleware) {
 		listGroup.GET("/roleList", api.GetRoleList)
 		listGroup.GET("/dictDataList", api.GetDictDataList)
 		listGroup.GET("/dictTypeList", api.GetDictTypeList)
+		listGroup.GET("/api", api.GetApiList)
+		listGroup.GET("/casbin/:roleKey", api.GetCasbinApiList)
 	}
 }
 
@@ -96,7 +99,7 @@ func registerSystemTreeRouter(g *gin.RouterGroup, auth *jwt.GinJWTMiddleware) {
 }
 
 func registerSystemOtherRouter(g *gin.RouterGroup, auth *jwt.GinJWTMiddleware) {
-	otherGroup := g.Group("/other").Use(auth.MiddlewareFunc())
+	otherGroup := g.Group("/other").Use(auth.MiddlewareFunc()).Use(middleware.AuthCheck())
 	{
 		otherGroup.GET("/dictData/:type", api.GetDictDataList)
 	}
@@ -136,6 +139,14 @@ func registerSystemBaseRouter(g *gin.RouterGroup, auth *jwt.GinJWTMiddleware) {
 		departmentGroup.PUT("", api.UpdateDepartment)
 		departmentGroup.DELETE("/:department_id", api.DeleteDepartment)
 	}
+	/* api */
+	apiGroup := g.Group("/api").Use(auth.MiddlewareFunc()).Use(middleware.AuthCheck())
+	{
+		apiGroup.GET("/:id", api.GetApi)
+		apiGroup.POST("", api.CreateApi)
+		apiGroup.PUT("", api.UpdateApi)
+		apiGroup.DELETE("/:id", api.DeleteApi)
+	}
 	/* dict */
 	dictGroup := g.Group("/dict").Use(auth.MiddlewareFunc()).Use(middleware.AuthCheck())
 	{
@@ -160,7 +171,7 @@ func registerSystemBaseRouter(g *gin.RouterGroup, auth *jwt.GinJWTMiddleware) {
 }
 
 func registerUploadRouter(v1 *gin.RouterGroup, auth *jwt.GinJWTMiddleware) {
-	uploadGroup := v1.Group("/upload").Use(auth.MiddlewareFunc())
+	uploadGroup := v1.Group("/upload").Use(auth.MiddlewareFunc()).Use(middleware.AuthCheck())
 	{
 		uploadGroup.POST("", upload.UploadFile)
 	}

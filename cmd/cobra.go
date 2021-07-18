@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"basic-antd/cmd/api"
+	"basic-antd/cmd/migrate"
 	"basic-antd/init/global"
 	"basic-antd/tools"
 	"errors"
@@ -11,8 +12,8 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use:          "app",
-	Short:        "app",
+	Use:          "response",
+	Short:        "response",
 	SilenceUsage: true,
 	Long:         `application`,
 	Args: func(cmd *cobra.Command, args []string) error {
@@ -37,6 +38,7 @@ func tip() {
 
 func init() {
 	rootCmd.AddCommand(api.StartCmd)
+	rootCmd.AddCommand(migrate.StartCmd)
 	/*rootCmd.AddCommand(migrate.StartCmd)
 	rootCmd.AddCommand(config.StartCmd)*/
 }

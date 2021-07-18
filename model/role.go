@@ -6,16 +6,22 @@ import (
 )
 
 type Role struct {
-	RoleId        int         `gorm:"primaryKey;autoIncrement" json:"roleId"`
-	RoleKey       string      `gorm:"size:255" json:"roleKey"` // "admin"
-	Name          string      `gorm:"size:255" json:"name"`    // 管理员
-	Describe      string      `json:"describe"`                // 描述
-	Status        string      `gorm:"size:2" json:"status"`
-	Sort          int         `json:"sort"`
-	PermissionIds []int       `gorm:"-" json:"permissionIds"`
-	Permission    interface{} `gorm:"-" json:"permissions"`
+	RoleId        int          `gorm:"primaryKey;autoIncrement" json:"roleId"`
+	RoleKey       string       `gorm:"size:255" json:"roleKey"` // "admin"
+	Name          string       `gorm:"size:255" json:"name"`    // 管理员
+	Describe      string       `json:"describe"`                // 描述
+	Status        string       `gorm:"size:2" json:"status"`
+	Sort          int          `json:"sort"`
+	PermissionIds []int        `gorm:"-" json:"permissionIds"`
+	Apis          []CasbinInfo `gorm:"-" json:"apis"`
+	Permission    interface{}  `gorm:"-" json:"permissions"`
 	By
 	Model
+}
+
+type CasbinInfo struct {
+	Path   string `json:"path"`
+	Method string `json:"method"`
 }
 
 type RoleInfo struct {
